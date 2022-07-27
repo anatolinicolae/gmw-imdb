@@ -51,7 +51,9 @@ class MovieController extends Controller
      */
     public function show(Movie $movie): \Illuminate\Http\Response
     {
-        //
+        return response(view('movies.show', [
+            'movie' => $movie,
+        ]));
     }
 
     /**

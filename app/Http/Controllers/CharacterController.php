@@ -80,7 +80,7 @@ class CharacterController extends Controller
     public function update(UpdateCharacterRequest $request, Character $character): \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
     {
         // Delete old file on demand
-        if ($request->get('delete_old_picture') !== 'no')
+        if ($request->get('delete_old_picture') !== 'no' && !is_null($character->picture))
         {
             Storage::delete($character->picture);
         }
@@ -91,6 +91,7 @@ class CharacterController extends Controller
             $path = $request->file('picture')->store('avatars');
         }
 
+        // Update the entity
         $character->update([
             ...$request->all(),
             'picture' => $path ?? null,

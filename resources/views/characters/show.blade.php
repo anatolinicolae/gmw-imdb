@@ -1,7 +1,8 @@
 @extends('layout')
 
 @section('content')
-    <form class="space-y-8 divide-y divide-gray-200" method="POST" action="{{ route('characters.update', $character) }}">
+    <form class="space-y-8 divide-y divide-gray-200" method="POST"
+          action="{{ route('characters.update', $character) }}">
         @csrf
 
         <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
@@ -66,7 +67,17 @@
                         <label for="picture" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                             Profile Picture </label>
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            <input type="file" name="picture" />
+                            @if(isset($character->picture))
+                                <img class="w-32 h-32 flex-shrink-0 rounded-full uploaded-picture"
+                                     src="{{ asset($character->picture) }}"
+                                     alt="Profile picture">
+                            @else
+                                <svg class="h-10 w-10 rounded-full text-gray-300" fill="currentColor"
+                                     viewBox="0 0 24 24">
+                                    <path
+                                        d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                </svg>
+                            @endif
                         </div>
                     </div>
 
@@ -77,17 +88,33 @@
         <div class="pt-5">
             <div class="flex justify-end">
                 <button type="button"
-                        onclick="history.go(-1)"
-                        class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Cancel
+                        onclick="document.getElementById('delete-character').submit()"
+                        class="bg-red-100 py-2 px-4 border border-red-300 rounded-md shadow-sm text-sm font-medium text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Delete
                 </button>
-                <button type="submit"
-                        disabled
-                        class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Save
-                </button>
+                <a href="{{ route('characters.edit', $character) }}"
+                   class="ml-3 inline-flexbg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Edit
+                </a>
             </div>
         </div>
+
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Appears in</h3>
+
+        <ul role="list" class="divide-y divide-gray-200">
+            @foreach($character->movies()->get() as $movie)
+                <a href="{{ route('movies.show', $movie) }}" class="block">
+                    <li class="py-4 flex">
+                        <p class="text-sm font-medium text-gray-900">{{ $movie->name }}</p>
+                    </li>
+                </a>
+            @endforeach
+        </ul>
+    </form>
+
+    <form method="POST" action="{{ route('characters.destroy', $character) }}" id="delete-character">
+        @csrf
+        @method('DELETE')
     </form>
 @endsection
 

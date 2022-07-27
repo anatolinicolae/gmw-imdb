@@ -23,6 +23,6 @@ class Movie extends Model
      */
     public function characters()
     {
-        return $this->hasMany(Movie::class);
+        return $this->belongsToMany(Character::class, 'movies_characters', 'movie_id', 'character_id');
     }
 }

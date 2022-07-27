@@ -1,22 +1,35 @@
 @extends('layout')
 
 @section('content')
-    <div class="flex -space-x-2 relative z-0 overflow-hidden">
-        @foreach($movies as $movie)
-            <img class="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                 src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                 alt="">
-            <img class="relative z-20 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                 src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                 alt="">
-            <img class="relative z-10 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                 src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                 alt="">
-            <img class="relative z-0 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                 alt="">
-        @endforeach
-    </div>
+    <div class="space-y-8 divide-y divide-gray-200">
+        <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+            <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ $movie->name }}</h3>
 
+                <ul role="list" class="divide-y divide-gray-200">
+                    @foreach($movie->characters()->get() as $character)
+                        <a href="{{ route('characters.show', $character) }}" class="block">
+                            <li class="py-4 flex">
+                                @if(isset($character->picture))
+                                    <img class="h-10 w-10 rounded-full"
+                                         src="{{ asset($character->picture) }}"
+                                         alt="{{ $character->name }}">
+                                @else
+                                    <svg class="h-10 w-10 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+                                @endif
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">{{ $character->name }}</p>
+                                    <p class="text-sm text-gray-500">{{ ucfirst($character->gender) }}</p>
+                                </div>
+                            </li>
+                        </a>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
 @endsection
 
