@@ -1,11 +1,11 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite('resources/css/app.css')
+    <title>Star Wars Movie Database</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('head')
-    <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body>
     @yield('header')

@@ -8,7 +8,7 @@ The database will have this 3 tables:
 - `movies_characters` (movie_id, character_id)
 
 Create a command that can be ran like this to download the required information:
-```
+```bash
 php bin/console starwars:import
 ```
 
@@ -19,3 +19,36 @@ Once you have downloaded the information of the API, we want to see in the homep
 When we click in one of the characters listed, we want to be redirected to a form to edit his data and to be able to upload the character’s picture. We also want to be able to delete the character in the homepage and in the form’s page.
 
 Extra points: Create a new page with the url “/movies” that list all the movies in the database. If we click in one of them we want to see the list of characters of that movie with the uploaded picture.
+
+## First steps
+
+To get started with the project Docker must be installed. You can then go ahead and start the stack required with the following command:
+```bash
+vendor/bin/sail up
+# > Server running on [http://0.0.0.0:80].
+```
+
+Some other steps are required for the app to work:
+```bash
+# Create .env
+cp .env.example .env
+# Generate app key
+vendor/bin/sail php artisan key:generate
+# Migrate database
+vendor/bin/sail php artisan migrate
+# Seed data
+vendor/bin/sail php artisan starwars:import
+```
+
+In order to be able to correctly view the pages, assets must be compiled with the following command:
+```bash
+# Only if APP_ENV=local
+vendor/bin/sail yarn dev
+# Only if APP_ENV=production
+vendor/bin/sail yarn build
+```
+
+In order to be able to correctly view the assets, storage must be linked with the following command:
+```bash
+vendor/bin/sail php artisan storage:link
+```
